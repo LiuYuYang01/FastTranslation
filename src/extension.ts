@@ -45,7 +45,7 @@ function generateSign(text: string, salt: number): string {
 }
 
 // 调用百度翻译API
-async function translateText(text: string, from: string = 'auto', to: string = 'zh'): Promise<string> {
+async function translateText(text: string, from: string = 'auto', to: string = 'auto'): Promise<string> {
 	if (!checkConfig()) throw new Error('请先配置百度翻译 API');
 
 	const config = getConfig();
@@ -54,8 +54,8 @@ async function translateText(text: string, from: string = 'auto', to: string = '
 	
 	const params = new URLSearchParams({
 		q: text,
-		from: from,
-		to: to,
+		from,
+		to,
 		appid: config.appId,
 		salt: salt.toString(),
 		sign: sign
@@ -153,7 +153,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// 注册中文到英文的翻译命令
-	const translateToEnglishCommand = vscode.commands.registerCommand('lyy.translateToEnglish', async () => {
+	const translateToEnglishCommand = vscode.commands.registerCommand('lyy.translateTo', async () => {
 		const editor = vscode.window.activeTextEditor;
 		
 		if (editor) {
@@ -170,7 +170,7 @@ export function activate(context: vscode.ExtensionContext) {
 						try {
 							progress.report({ message: "正在调用百度翻译API..." });
 							
-							const translatedText = await translateText(text, 'zh', 'en');
+							const translatedText = await translateText(text);
 							
 							await editor.edit(editBuilder => {
 								editBuilder.replace(selection, translatedText);
@@ -217,72 +217,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// 注册英文到中文的翻译命令
-	const translateToChineseCommand = vscode.commands.registerCommand('lyy.translateToChinese', async () => {
-		const editor = vscode.window.activeTextEditor;
-		
-		if (editor) {
-			const selection = editor.selection;
-			const text = editor.document.getText(selection);
-			
-			if (text) {
-				try {
-					await vscode.window.withProgress({
-						location: vscode.ProgressLocation.Notification,
-						title: "正在翻译成中文...",
-						cancellable: false
-					}, async (progress) => {
-						try {
-							progress.report({ message: "正在调用百度翻译API..." });
-							
-							const translatedText = await translateText(text, 'en', 'zh');
-							
-							await editor.edit(editBuilder => {
-								editBuilder.replace(selection, translatedText);
-							});
-							
-							try {
-								vscode.window.showInformationMessage('翻译并替换成功！');
-							} catch (notificationError) {
-								console.log('通知显示失败，可能是通道已关闭');
-							}
-						} catch (progressError) {
-							console.error('翻译过程中发生错误:', progressError);
-							throw progressError;
-						}
-					});
-				} catch (error: unknown) {
-					if (error instanceof Error) {
-						try {
-							vscode.window.showErrorMessage(`翻译失败: ${error.message}`);
-						} catch (notificationError) {
-							console.error('错误通知显示失败:', notificationError);
-						}
-					} else {
-						try {
-							vscode.window.showErrorMessage('翻译失败: 未知错误');
-						} catch (notificationError) {
-							console.error('错误通知显示失败:', notificationError);
-						}
-					}
-				}
-			} else {
-				try {
-					vscode.window.showInformationMessage('没有选中任何文本');
-				} catch (notificationError) {
-					console.log('通知显示失败，可能是通道已关闭');
-				}
-			}
-		} else {
-			try {
-				vscode.window.showInformationMessage('没有打开任何编辑器');
-			} catch (notificationError) {
-				console.log('通知显示失败，可能是通道已关闭');
-			}
-		}
-	});
-
-	context.subscriptions.push(disposable, translateCommand, translateToEnglishCommand, translateToChineseCommand);
+	context.subscriptions.push(disposable, translateCommand, translateToEnglishCommand);
 }
 
 // 当扩展被停用时调用此方法

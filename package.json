@@ -39,34 +39,23 @@
         "title": "翻译指定内容"
       },
       {
-        "command": "lyy.translateToEnglish",
-        "title": "从中文转英文"
-      },
-      {
-        "command": "lyy.translateToChinese",
-        "title": "从英文转中文"
+        "command": "lyy.translateTo",
+        "title": "自动识别语言并翻译"
       }
     ],
     "keybindings": [
       {
         "command": "lyy.translate",
-        "key": "cmd+shift+b",
-        "mac": "cmd+shift+b",
-        "win": "ctrl+shift+b",
+        "key": "cmd+b",
+        "mac": "cmd+b",
+        "win": "alt+b",
         "when": "editorHasSelection"
       },
       {
-        "command": "lyy.translateToChinese",
-        "key": "cmd+shift+n",
-        "mac": "cmd+shift+n",
-        "win": "ctrl+shift+n",
-        "when": "editorHasSelection"
-      },
-      {
-        "command": "lyy.translateToEnglish",
-        "key": "cmd+shift+m",
-        "mac": "cmd+shift+m",
-        "win": "ctrl+shift+m",
+        "command": "lyy.translateTo",
+        "key": "alt alt",
+        "mac": "alt alt",
+        "win": "alt alt",
         "when": "editorHasSelection"
       }
     ]

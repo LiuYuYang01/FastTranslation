@@ -8,6 +8,5 @@
 
 | 快捷键 | 功能描述 |
 | ------ | -------- |
-| `Cmd+Shift+B` / `Ctrl+Shift+B` | 翻译指定内容 |
-| `Cmd+Shift+N` / `Ctrl+Shift+N` | 从英文转中文 |
-| `Cmd+Shift+M` / `Ctrl+Shift+M` | 从中文转英文 |
+| `Cmd+B` / `Alt+B` | 翻译指定内容 |
+| `双击 Alt` | 从英文转中文 |
